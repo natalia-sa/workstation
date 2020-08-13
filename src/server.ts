@@ -1,10 +1,13 @@
 import express from 'express';
 import routes from './routes';
 import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 
 const app = express();
 
-mongoose.connect('mongodb+srv://natalia:novasenha2@omnistack-oq54w.mongodb.net/semana09?retryWrites=true&w=majority',{
+dotenv.config();
+
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@omnistack-oq54w.mongodb.net/semana09?retryWrites=true&w=majority`,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
