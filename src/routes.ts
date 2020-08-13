@@ -10,7 +10,12 @@ const meetingRoomController = new MeetingRoomController();
 const routes = express.Router();
 
 routes.post('/users', userController.create);
-routes.post('/workstation', workstationController.create);
+routes.get('/users', userController.index);
+
 routes.post('/meeting', meetingRoomController.create);
+routes.get('/meeting', meetingRoomController.index);
+
+routes.post('/workstation', workstationController.create);
+routes.get('/workstation', workstationController.index);
 
 export default routes;
