@@ -3,7 +3,7 @@ import routes from './routes';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 
-export default class app {
+export default class App {
     public express: express.Application
 
     private middlewares() {
