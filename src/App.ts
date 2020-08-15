@@ -2,12 +2,15 @@ import express from 'express';
 import routes from './routes';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+import cors from 'cors';
 
 export default class App {
     public express: express.Application
 
     private middlewares() {
         this.express.use(express.json())
+        this.express.use(cors());
+        
     }
 
     constructor () {

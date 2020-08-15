@@ -4,6 +4,7 @@ import  WorkstationController from './controllers/WorkstationController';
 import MeetingRoomController from './controllers/MeetingRoomController';
 import ScheduleController from './controllers/ScheduleController';
 
+
 const userController = new UserController();
 const workstationController = new WorkstationController();
 const meetingRoomController = new MeetingRoomController();
@@ -14,6 +15,7 @@ const routes = express.Router();
 routes.post('/users', userController.create);
 routes.get('/users', userController.index);
 routes.put('/users/:userId', userController.update);
+routes.delete('/users/:userId', userController.delete);
 
 routes.post('/schedule', scheduleController.create);
 routes.delete('/schedule/:scheduleId', scheduleController.delete);
@@ -28,4 +30,8 @@ routes.get('/workstation', workstationController.index);
 routes.delete('/workstation/:workstationId', workstationController.delete);
 routes.put('/workstation/:workstationId', workstationController.update);
 
+routes.post('/login', (req, res) => {
+    res.json({message:"oi"});
+})
+routes.post('/register', userController.teste)
 export default routes;
