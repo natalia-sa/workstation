@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/mongoose": "^5.7.36",
+    "@types/nodemailer": "^6.4.0",
     "@types/passport": "^1.0.4",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
@@ -24,6 +25,7 @@
     "express-flash": "^0.0.2",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.28",
+    "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   }
