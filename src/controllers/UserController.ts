@@ -1,8 +1,17 @@
 import { Request, Response } from "express"
 import User from '../models/User';
-import bcrypt from 'bcrypt';
-
+import { UserService } from "../services/UserService";
+import { IMessage, IMailProvider } from "../providers/IMailProvider";
+import { MailProvider } from "../providers/implementations/MailTrapMailProvider";
 export default class UserController {
+    private userService: UserService
+    private mailProvider: IMailProvider
+
+    constructor () {
+        this.userService = new UserService()
+        this.mailProvider = new MailProvider()
+    }
+
     async update(request: Request, response: Response): Promise<Response> {
 
         const id = await request.params.userId;
@@ -28,40 +37,41 @@ export default class UserController {
         return response.json(users);
     }
 
-     async create(request: Request, response: Response): Promise<Response> {
-        const email = request.body.email;
-        const password = request.body.password;
-
-        let user = await User.findOne({ email: email })
-    
-        if(!user) {
-            user = await User.create({ email, password});
-        }
-
-        return response.json(user);
-
-    }
     async delete(request: Request, response: Response): Promise<Response> {
         const id = request.params.userId;
         await User.remove({_id: id});
         return response.json({message: "user removed with success"})
     }
 
-    async teste(request: Request, response: Response): Promise<Response> {
-            
+    async create(request: Request, response: Response): Promise<Response> {
+        const { password, email } = request.body
+        
         try {
-            const hashedPass = await bcrypt.hash(request.body.password, 10);
-                
-            const email = await request.body.email;
+            await this.userService.saveUser(email, password)
 
-            const user = await User.create({email, hashedPass});
-            return response.json(user);
+            const message: IMessage = {
+                subject: 'Email Confirmation',
+                body: '<h1> Olá, Esse é um email de confirmação</h1><br><p>Cliente no seguinte email para confirmar sua conta.</p>',
+                from: {
+                    email: 'coworking@mail.com',
+                    name: 'CoWorking'
+                },
+                to: {
+                    email: email,
+                    name: email
+                }
+            }
+            await this.mailProvider.sendMail(message)
+
+            return response.status(200).json({
+                status: 'User Created'
+            })
 
         } catch (err) {
-            return response.json(err)
-        }
-                
+            return response.status(400).json({
+                status: 'Error creating user. Please contact us'
+            })
+        }         
     }
-
 }
 
