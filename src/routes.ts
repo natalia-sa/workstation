@@ -3,6 +3,9 @@ import  UserController from './controllers/UserController';
 import  WorkstationController from './controllers/WorkstationController';
 import MeetingRoomController from './controllers/MeetingRoomController';
 import ScheduleController from './controllers/ScheduleController';
+import Mail from 'nodemailer/lib/mailer';
+import { MailProvider } from './providers/implementations/MailTrapMailProvider';
+import { IMessage } from './providers/IMailProvider';
 
 
 const userController = new UserController();
@@ -29,9 +32,5 @@ routes.post('/workstation', workstationController.create);
 routes.get('/workstation', workstationController.index);
 routes.delete('/workstation/:workstationId', workstationController.delete);
 routes.put('/workstation/:workstationId', workstationController.update);
-
-routes.post('/login', (req, res) => {
-    res.json({message:"oi"});
-})
-routes.post('/register', userController.teste)
+routes.post('/register', userController.create)
 export default routes;
