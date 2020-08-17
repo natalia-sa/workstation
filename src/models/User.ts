@@ -1,4 +1,15 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, {Schema, Document} from 'mongoose';
+
+export interface UserModel extends Document{
+    email: string,
+    hashedPassword: string,
+    name?: string,
+    address?: string,
+    cpf?: string,
+    bio?: string,
+    birthday?: string,
+    isActive?: boolean
+}
 
 const UserSchema = new Schema({
     email: {
@@ -6,9 +17,10 @@ const UserSchema = new Schema({
         required: true,
         trim: true
     },
-    hashedPass: {
+    hashedPassword: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     name: {
         type:String,
@@ -29,9 +41,15 @@ const UserSchema = new Schema({
     birthday: {
         type:String,
         required: false
+    },
+    isActive: {
+        type: Boolean,
+        required: false,
+        default: false
     }
     
 })
 
-export default mongoose.model('userSchema', UserSchema);
+
+export default mongoose.model<UserModel>('userSchema', UserSchema);
 

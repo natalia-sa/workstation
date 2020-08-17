@@ -1,15 +1,16 @@
-import { Request, Response } from "express"
+import e, { Request, Response } from "express"
 import User from '../models/User';
-import { UserService } from "../services/UserService";
 import { IMessage, IMailProvider } from "../providers/IMailProvider";
-import { MailProvider } from "../providers/implementations/MailTrapMailProvider";
+import { MailProvider } from "../providers/implementations/MailProvider";
+import { IUserService } from "../services/IUserService";
+import { UserService } from "../services/implementations/UserService";
 export default class UserController {
-    private userService: UserService
-    private mailProvider: IMailProvider
+    public mailProvider: IMailProvider
+    public userService: IUserService
 
     constructor () {
-        this.userService = new UserService()
         this.mailProvider = new MailProvider()
+        this.userService = new UserService()
     }
 
     async update(request: Request, response: Response): Promise<Response> {
@@ -17,29 +18,40 @@ export default class UserController {
         const id = await request.params.userId;
         const {email, name, address, cpf, bio, birthday} = request.body;
 
-        await User.updateMany({"_id": id}, 
-            {$set:
-                {"email": email,
-                "name":name,
-                "address": address, 
-                "cpf":cpf,
-                "bio": bio, 
-                "birthday": birthday}})
+        await this.userService.updateUser(email, name, address, cpf, bio, birthday, id)
 
-        const user = await User.findOne({_id: id})
-        return response.json(user);
+        return response.status(200).json({
+            message: 'User updated'
+        });
+    }
 
+    async confirmAccount(request: Request, response: Response): Promise<Response> {
+        const { email } = request.query
+
+        try {
+            await this.userService.confirmAccount(String(email))
+
+            return response.status(200).json({
+                message: 'User confirmed'
+            })
+        } catch (err) {
+            return response.status(400).json({
+                message: err.message
+            })
+        }       
     }
 
     async index(request: Request, response: Response): Promise<Response> {
-        const users = await User.find();
+        const users = await this.userService.listAllUsers()
 
         return response.json(users);
     }
 
     async delete(request: Request, response: Response): Promise<Response> {
-        const id = request.params.userId;
-        await User.remove({_id: id});
+        const email = request.params.email;
+        
+        await this.userService.deleteUser(email)
+
         return response.json({message: "user removed with success"})
     }
 
@@ -47,31 +59,48 @@ export default class UserController {
         const { password, email } = request.body
         
         try {
-            await this.userService.saveUser(email, password)
 
-            const message: IMessage = {
-                subject: 'Email Confirmation',
-                body: '<h1> Olá, Esse é um email de confirmação</h1><br><p>Cliente no seguinte email para confirmar sua conta.</p>',
-                from: {
-                    email: 'coworking@mail.com',
-                    name: 'CoWorking'
-                },
-                to: {
-                    email: email,
-                    name: email
-                }
+            const user = await User.findOne({ email })
+            if (!user) {
+                await this.userService.saveUser(email, password)
+                await this.sendCofirmationEmail(email)
+    
+                return response.status(200).json({
+                    status: 'User Created'
+                })
+            } else {
+                return response.status(400).json({
+                    status: 'That email already exists'
+                })
             }
-            await this.mailProvider.sendMail(message)
-
-            return response.status(200).json({
-                status: 'User Created'
-            })
 
         } catch (err) {
             return response.status(400).json({
                 status: 'Error creating user. Please contact us'
             })
         }         
+    }
+
+    private async sendCofirmationEmail(email: string) {
+        const message: IMessage = {
+            subject: 'Email Confirmation',
+            body: `<h2>Hello ${email}</h2>, 
+
+            <h3> Welcome to coWorking ${email}
+            Click <a href="http://${process.env.HOST}:${process.env.PORT}/confirm?email=${email}"> HERE </a> to activate your account                   
+            </h3>
+    
+            Team. Coworking`,
+            from: {
+                email: 'natalia.andre@ccc.ufcg.edu.br',
+                name: 'CoWorking'
+            },
+            to: {
+                email: email,
+                name: email
+            }
+        }
+        await this.mailProvider.sendMail(message)
     }
 }
 

@@ -1,18 +1,20 @@
 import { IMailProvider, IMessage } from '../IMailProvider'
 import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
+import * as dotenv from 'dotenv';
 
 export class MailProvider implements IMailProvider {
     private transporter: Mail;
     constructor () {
-      this.transporter = nodemailer.createTransport({
-        host: process.env.MAIL_SMTP_HOST,
-        port: Number(process.env.MAIL_SMTP_PORT),
-        auth: {
-          user: process.env.MAIL_SMTP_USERNAME,
-          pass: process.env.MAIL_SMTP_PASSWORD
-        }
-      })
+        dotenv.config()
+        this.transporter = nodemailer.createTransport({
+            host: process.env.MAIL_SMTP_HOST,
+            port: Number(process.env.MAIL_SMTP_PORT),
+            auth: {
+            user: process.env.MAIL_SMTP_USERNAME,
+            pass: process.env.MAIL_SMTP_PASSWORD
+            }
+        })
     }
 
     async sendMail (message: IMessage): Promise<void> {
