@@ -24,7 +24,7 @@ export class AuthController {
         }    
         
         const token = jwt.sign({ id: user.email }, SECRET , {
-            expiresIn: "1h"
+            expiresIn: "1d"
           });
                 
         

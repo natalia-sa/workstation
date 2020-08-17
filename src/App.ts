@@ -1,17 +1,15 @@
-import express from 'express';
-import routes from './routes';
+import express, { Router, response, application } from 'express';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
+import { authRouter } from './routes/auth.routes';
+import { userRouter } from './routes/user.routes';
+import { workstationRouter } from './routes/workstation.routes';
+import { meetingRoomRounter } from './routes/meetingRoom.routes';
+import { scheduleRouter } from './routes/schedule.routes';
 
 export default class App {
     public express: express.Application
-
-    private middlewares() {
-        this.express.use(express.json())
-        this.express.use(cors());
-        
-    }
 
     constructor () {
         dotenv.config();
@@ -21,6 +19,11 @@ export default class App {
         this.routes()
     }
 
+    private middlewares() {
+        this.express.use(express.json())
+        this.express.use(cors());
+    }
+
     private async database() {
         await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@omnistack-oq54w.mongodb.net/coworking?retryWrites=true&w=majority`,{
             useNewUrlParser: true,
@@ -28,6 +31,11 @@ export default class App {
         })
     }
     private routes() {
-        this.express.use(routes)
+        this.express.use(authRouter)
+        this.express.use(userRouter)
+        this.express.use(workstationRouter)
+        this.express.use(meetingRoomRounter)
+        this.express.use(scheduleRouter)
     }
+    
 }

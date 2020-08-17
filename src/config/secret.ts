@@ -1,3 +1,7 @@
-const SECRET = 'c1ed60949799e3adcd72928bb3314fe0'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
+const SECRET = String(process.env.JWT_TOKEN)
 
 export { SECRET }
