@@ -25,7 +25,7 @@ export default class App {
     }
 
     private async database() {
-        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@omnistack-oq54w.mongodb.net/coworking?retryWrites=true&w=majority`,{
+        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URL}/${process.env.DB_DATABSE}?retryWrites=true&w=majority`,{
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
