@@ -29,4 +29,14 @@ export default class ScheduleController {
         return response.json({message: "shcedule removed with success"});
 
     }
+
+    async index(request: Request, response: Response): Promise<Response> {
+        const { id } = request.params
+
+        const schedules = await this.scheduleService.findByRoomId(id)
+
+        return response.json(schedules)
+
+    }
+
 }
