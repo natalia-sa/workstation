@@ -4,4 +4,4 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 const app = new App()
 
-app.express.listen(process.env.PORT)
+app.express.listen( process.env.PORT ||process.env.PORT1)
