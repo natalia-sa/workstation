@@ -87,7 +87,7 @@ export default class UserController {
             body: `<h2>Hello ${email}</h2>, 
 
             <h3> Welcome to coWorking ${email}
-            Click <a href="http://${process.env.HOST}:${process.env.PORT}/confirm?email=${email}"> HERE </a> to activate your account                   
+            Click <a href="https://${process.env.HOST}:${process.env.PORT}/confirm?email=${email}"> HERE </a> to activate your account                   
             </h3>
     
             Team. Coworking`,
