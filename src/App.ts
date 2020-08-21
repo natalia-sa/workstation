@@ -21,7 +21,7 @@ export default class App {
 
     private middlewares() {
         this.express.use(express.json())
-        this.express.use(cors({origin: 'https://coworking1-frontend.herokuapp.com'}));
+        this.express.use(cors());
     }
 
     private async database() {
