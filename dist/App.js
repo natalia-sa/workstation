@@ -41,7 +41,7 @@ class App {
     }
     middlewares() {
         this.express.use(express_1.default.json());
-        this.express.use(cors_1.default());
+        this.express.use(cors_1.default({ origin: 'https://coworking1-frontend.herokuapp.com' }));
     }
     async database() {
         await mongoose_1.default.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URL}/${process.env.DB_DATABSE}?retryWrites=true&w=majority`, {
