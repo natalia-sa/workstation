@@ -1,4 +1,4 @@
-# CoWorking
+# :computer: CoWorking
 > backend do sistema para cadastro de usuários, workstations, e meeting rooms
 
 # Sobre 
