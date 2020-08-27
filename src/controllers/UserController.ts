@@ -56,7 +56,7 @@ export default class UserController {
     }
 
     async getUser(request: Request, response: Response): Promise<Response> {
-        const email = request.body.email;
+        const email = request.params.email;
         
         const user = await this.userService.getUser(email)
 

@@ -13,7 +13,7 @@ userRouter.get('/confirm', (request, response) => {
     return userController.confirmAccount(request, response)
 })
 
-userRouter.get('/user', (request,response) => {
+userRouter.get('/user/:email', (request,response) => {
     return userController.getUser(request, response)
 })
 
