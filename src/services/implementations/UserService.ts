@@ -26,6 +26,12 @@ export class UserService implements IUserService {
 
         return users
     }
+    public async getUser(email:string):Promise<any> {
+        const user = await User.findOne({email});
+
+        return user;
+    }
+
     public async confirmAccount(email: string): Promise<void> {
         const user = await User.findOne({ email })
 
