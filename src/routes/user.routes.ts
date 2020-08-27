@@ -13,6 +13,10 @@ userRouter.get('/confirm', (request, response) => {
     return userController.confirmAccount(request, response)
 })
 
+userRouter.get('/user', (request,response) => {
+    return userController.getUser(request, response)
+})
+
 userRouter.get('/users', jwtMiddleware, (request: Request, response: Response) => {
     return userController.index(request, response)
 });

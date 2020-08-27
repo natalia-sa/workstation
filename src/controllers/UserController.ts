@@ -55,6 +55,13 @@ export default class UserController {
         return response.json({message: "user removed with success"})
     }
 
+    async getUser(request: Request, response: Response): Promise<Response> {
+        const email = request.body.email;
+        const user = await User.findOne( {email} )
+
+        return response.json(user)
+    }
+
     async create(request: Request, response: Response): Promise<Response> {
         const { password, email } = request.body
         
